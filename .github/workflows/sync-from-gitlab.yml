@@ -24,7 +24,7 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.vse.cz/skolni-username/menza-api.git
+          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/FIS-VSE/4IT115/2025ZS/ut1245/zaca06/menzaucty.git
           git fetch gitlab
 
       - name: Merge GitLab → GitHub main
