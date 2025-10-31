@@ -34,6 +34,7 @@ jobs:
 
       - name: Push updates to GitHub
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git push origin main
+          GH_PAT: ${{ secrets.GH_PAT }}
+          run: |
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/azakhardev/MenzaUcty.git
+            git push origin main
