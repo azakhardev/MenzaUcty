@@ -1,10 +1,14 @@
 package cz.vse.menza_api.controllers;
 
+import cz.vse.menza_api.dto.LoginCredentials;
+import cz.vse.menza_api.models.Meal;
 import cz.vse.menza_api.models.User;
 import cz.vse.menza_api.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -30,22 +34,24 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.createUser(user);
-        return ResponseEntity.ok(savedUser);
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<BigDecimal> getUserBalance(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(user.getBalance());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updated = userService.updateUser(id, user);
-        if (updated == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(updated);
+    //TODO
+    @GetMapping("/{id}/history")
+    public ResponseEntity<List<Meal>> getUserHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(Collections.emptyList());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody LoginCredentials user) throws Exception {
+        User u = userService.login(user.getUsername(), user.getPassword());
+
+        return ResponseEntity.ok(u);
     }
 }

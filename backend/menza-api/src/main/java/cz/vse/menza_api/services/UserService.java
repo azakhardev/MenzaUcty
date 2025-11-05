@@ -1,5 +1,7 @@
 package cz.vse.menza_api.services;
 
+import cz.vse.menza_api.exceptions.InvalidCredentialsException;
+import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.models.User;
 import cz.vse.menza_api.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,20 @@ public class UserService {
                     return userRepository.save(user);
                 })
                 .orElse(null);
+    }
+
+    public User login(String username, String password) throws Exception {
+        User user = userRepository.getUserByUsername(username);
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        if(user.getPassword().equals(password)) {
+            return user;
+        }
+
+        throw new InvalidCredentialsException("Invalid username or password");
     }
 
     public void deleteUser(Long id) {
