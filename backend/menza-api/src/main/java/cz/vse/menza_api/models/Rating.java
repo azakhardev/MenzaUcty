@@ -1,5 +1,6 @@
 package cz.vse.menza_api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.vse.menza_api.models.enums.RatingType;
 import jakarta.persistence.*;
 
@@ -11,11 +12,13 @@ public class Rating {
     @Id
     @ManyToOne
     @JoinColumn(name = "mealId", nullable = false)
+    @JsonIgnore
     private Meal meal;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package cz.vse.menza_api.controllers;
 
 import cz.vse.menza_api.dto.LoginCredentials;
+import cz.vse.menza_api.dto.TopUpRequest;
 import cz.vse.menza_api.models.Meal;
 import cz.vse.menza_api.models.User;
 import cz.vse.menza_api.services.UserService;
@@ -53,5 +54,16 @@ public class UsersController {
         User u = userService.login(user.getUsername(), user.getPassword());
 
         return ResponseEntity.ok(u);
+    }
+
+    //TODO
+    @PostMapping("/topup")
+    public ResponseEntity<BigDecimal> topUp(@RequestBody TopUpRequest topUp) throws Exception {
+        User user = userService.getUserById(topUp.getUserId());
+
+        //TODO: Add creation logic to the service for selected user and save changes to db - then return remaining amount
+
+
+        return ResponseEntity.ok(new BigDecimal(0));
     }
 }
