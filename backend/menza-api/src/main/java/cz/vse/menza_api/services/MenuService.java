@@ -1,6 +1,10 @@
 package cz.vse.menza_api.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cz.vse.menza_api.dto.menu.DailyMenu;
+import cz.vse.menza_api.dto.menu.WeeklyMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -8,7 +12,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
@@ -18,47 +21,37 @@ public class MenuService {
     @Value("${menu.source}")
     private String menuSource;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final MealService mealService;
-    private final ResourceLoader resourceLoader ;
+    private final ResourceLoader resourceLoader;
 
     @Autowired
     public MenuService(MealService mealService, ResourceLoader resourceLoader) {
         this.mealService = mealService;
         this.resourceLoader = resourceLoader;
+
+        //Allows JACKSON to transform timestamps to LocalDate
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new JavaTimeModule());
+        this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    public String getRawMenu() {
+    public DailyMenu getMenuDay(LocalDate date) {
         try {
+            // Load JSON
             Resource resource = resourceLoader.getResource(menuSource);
 
-            return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            // Transform to WeeklyMenu object
+            WeeklyMenu weeklyMenu = objectMapper.readValue(resource.getInputStream(), WeeklyMenu.class);
+
+            // Find date by day
+            return weeklyMenu.getDays().stream()
+                    .filter(day -> day.getDate().equals(date))
+                    .findFirst()
+                    .orElse(null);
 
         } catch (IOException e) {
-            return "Error reading menu file: " + e.getMessage();
+            throw new RuntimeException("Error loading menu: " + e.getMessage(), e);
         }
     }
-
-//    public MenuDay getMenuForDate(LocalDate date) throws IOException {
-//        URL url = new URL(menuSource);
-//        WeeklyMenu weeklyMenu = objectMapper.readValue(url, WeeklyMenu.class);
-//
-//        return weeklyMenu.getWeeks().stream()
-//                .flatMap(week -> week.getDays().stream())
-//                .filter(day -> day.getDate().equals(date))
-//                .findFirst()
-//                .orElse(null);
-//    }
-//
-//    public MenuDayResponse getFullMenuForDate(LocalDate date) throws IOException {
-//        MenuDay day = getMenuForDate(date);
-//        if (day == null) return null;
-//
-//        return new MenuDayResponse(
-//                date,
-//                mealService.getMealsByIds(day.getMainCourses()),
-//                mealService.getMealsByIds(day.getBuffet()),
-//                mealService.getMealsByIds(day.getDrinks())
-//        );
-//    }
 }
