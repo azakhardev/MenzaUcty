@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/menu")
+@RequestMapping("/menu")
 public class MenuController {
 
     private final MenuService menuService;
 
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
+    }
+
+    @GetMapping("/raw")
+    public ResponseEntity<String> getRawMenu(){
+        return ResponseEntity.ok( menuService.getRawMenu());
     }
 
 //    @GetMapping("/{date}")

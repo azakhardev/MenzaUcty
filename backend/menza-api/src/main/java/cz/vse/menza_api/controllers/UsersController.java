@@ -62,8 +62,7 @@ public class UsersController {
         User user = userService.getUserById(topUp.getUserId());
 
         //TODO: Add creation logic to the service for selected user and save changes to db - then return remaining amount
-
-
+        
         return ResponseEntity.ok(new BigDecimal(0));
     }
 }
