@@ -43,10 +43,10 @@ public class UsersController {
         return ResponseEntity.ok(user.getBalance());
     }
 
-    //TODO
     @GetMapping("/{id}/history")
     public ResponseEntity<List<Meal>> getUserHistory(@PathVariable Long id) {
-        return ResponseEntity.ok(Collections.emptyList());
+        List<Meal> history = userService.getUserHistory(id);
+        return ResponseEntity.ok(history);
     }
 
     @PostMapping("/login")
@@ -56,13 +56,10 @@ public class UsersController {
         return ResponseEntity.ok(u);
     }
 
-    //TODO
     @PostMapping("/topup")
-    public ResponseEntity<BigDecimal> topUp(@RequestBody TopUpRequest topUp) throws Exception {
-        User user = userService.getUserById(topUp.getUserId());
+    public ResponseEntity<BigDecimal> topUp(@RequestBody TopUpRequest topUp) {
+        BigDecimal newBalance = userService.topUpBalance(topUp.getUserId(), topUp.getAmount());
 
-        //TODO: Add creation logic to the service for selected user and save changes to db - then return remaining amount
-        
-        return ResponseEntity.ok(new BigDecimal(0));
+        return ResponseEntity.ok(newBalance);
     }
 }

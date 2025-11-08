@@ -3,18 +3,24 @@ package cz.vse.menza_api.services;
 import cz.vse.menza_api.exceptions.InvalidCredentialsException;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.models.User;
+import cz.vse.menza_api.models.Meal;
+import cz.vse.menza_api.models.OrdersHistory;
+import cz.vse.menza_api.repositories.OrderHistoryRepository;
+import java.util.stream.Collectors;
 import cz.vse.menza_api.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final OrderHistoryRepository ordersHistoryRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OrderHistoryRepository ordersHistoryRepository) {
         this.userRepository = userRepository;
+        this.ordersHistoryRepository = ordersHistoryRepository;
     }
 
     public List<User> getAllUsers() {
@@ -56,5 +62,35 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public BigDecimal topUpBalance(Long userId, BigDecimal amountToAdd) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        if (amountToAdd == null || amountToAdd.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Top-up amount must be positive.");
+        }
+
+        BigDecimal currentBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.ZERO;
+
+        BigDecimal newBalance = currentBalance.add(amountToAdd);
+
+        user.setBalance(newBalance);
+        userRepository.save(user);
+
+        return newBalance;
+    }
+
+    public List<Meal> getUserHistory(Long userId) throws ResourceNotFoundException {
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found with id: " + userId);
+        }
+
+        List<OrdersHistory> historyRecords = ordersHistoryRepository.findByUserId(userId);
+
+        return historyRecords.stream()
+                .map(OrdersHistory::getMeal)
+                .collect(Collectors.toList());
     }
 }
