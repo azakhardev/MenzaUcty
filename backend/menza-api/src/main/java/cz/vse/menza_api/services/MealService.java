@@ -48,8 +48,13 @@ public class MealService {
             throw new ResourceNotFoundException("Meal not found");
         }
 
-        //TODO: Map price and alergens
-        return new MealOverview(meal.getId(), meal.getName(), new BigDecimal(0), Collections.emptyList());
+        List<MealsHistory> mealsHistory = this.getMealHistory(meal.getId());
+        BigDecimal lastPrice = BigDecimal.ZERO;
+        if (mealsHistory != null && !mealsHistory.isEmpty()) {
+            lastPrice = mealsHistory.get(mealsHistory.size() - 1).getPrice();
+        }
+
+        return new MealOverview(meal.getId(), meal.getName(), lastPrice, this.getMealAllergens(meal.getId()));
     }
 
     public List<MealsHistory> getMealHistory(Long mealId) {
