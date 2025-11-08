@@ -33,16 +33,16 @@ public class MealsController {
         return ResponseEntity.ok(meal);
     }
 
-    //TODO
     @GetMapping("/{id}/history")
     public ResponseEntity<List<MealsHistory>> getMealHistory(@PathVariable Long id) {
-        return ResponseEntity.ok(Collections.emptyList());
+        List<MealsHistory> history = mealService.getMealHistory(id);
+        return ResponseEntity.ok(history);
     }
 
-    //TODO
     @GetMapping("/{id}/allergens")
     public ResponseEntity<List<Alergen>> getMealAllergens(@PathVariable Long id) {
-        return ResponseEntity.ok(Collections.emptyList());
+        List<Alergen> alergens = mealService.getMealAllergens(id);
+        return ResponseEntity.ok(alergens);
     }
 
     //TODO
