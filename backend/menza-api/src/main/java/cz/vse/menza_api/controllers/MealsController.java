@@ -5,7 +5,9 @@ import cz.vse.menza_api.models.Alergen;
 import cz.vse.menza_api.models.Meal;
 import cz.vse.menza_api.models.MealsHistory;
 import cz.vse.menza_api.models.Rating;
+import cz.vse.menza_api.models.enums.RatingType;
 import cz.vse.menza_api.services.MealService;
+import cz.vse.menza_api.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +23,12 @@ import java.util.List;
 public class MealsController {
 
     MealService mealService;
+    RatingService ratingService;
 
     @Autowired
-    public MealsController(MealService mealService) {
+    public MealsController(MealService mealService, RatingService ratingService) {
         this.mealService = mealService;
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/{id}")
@@ -45,9 +49,18 @@ public class MealsController {
         return ResponseEntity.ok(alergens);
     }
 
-    //TODO
     @GetMapping("/{id}/rating")
     public ResponseEntity<RatingResponse> getMealRatings(@PathVariable Long id) {
-        return ResponseEntity.ok(new RatingResponse(0L,0L));
+        List<Rating> ratings = Collections.singletonList(ratingService.getRatingById(id));
+
+        long likes = ratings.stream()
+                .filter(r -> r.getRating() == RatingType.LIKED)
+                .count();
+
+        long dislikes = ratings.stream()
+                .filter(r -> r.getRating() == RatingType.DISLIKED)
+                .count();
+
+        return ResponseEntity.ok(new RatingResponse(likes, dislikes));
     }
 }
