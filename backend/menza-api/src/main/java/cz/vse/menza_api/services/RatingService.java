@@ -2,7 +2,11 @@ package cz.vse.menza_api.services;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.models.Rating;
 import cz.vse.menza_api.repositories.RatingRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class RatingService {
     private final RatingRepository ratingRepository;
 
@@ -10,14 +14,14 @@ public class RatingService {
         this.ratingRepository = ratingRepository;
     }
 
-    public Rating getRatingById(Long id) {
-        Rating rating = ratingRepository.getRatingById(id);
+    public List<Rating> getRatingsByMealId(Long id) {
+        List<Rating> ratings = ratingRepository.getRatingsByMeal_Id(id);
 
-        if(rating == null) {
-            throw new ResourceNotFoundException("Meal not found");
+        if(ratings.isEmpty()) {
+            throw new ResourceNotFoundException("Meal doesnt have ratings");
         }
 
-        return rating;
+        return ratings;
     }
 
 }

@@ -37,7 +37,6 @@ public class MealService {
     }
 
     public List<Meal> getMealsByIds(List<Long> ids) {
-
         return new ArrayList<>(mealRepository.findAllById(ids));
     }
 
