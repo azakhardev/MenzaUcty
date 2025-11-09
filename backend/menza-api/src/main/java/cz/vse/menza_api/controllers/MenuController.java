@@ -1,5 +1,6 @@
 package cz.vse.menza_api.controllers;
 
+import cz.vse.menza_api.dto.menu.BuffetMenu;
 import cz.vse.menza_api.dto.menu.DailyMenu;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.services.MenuService;
@@ -33,6 +34,19 @@ public class MenuController {
             return ResponseEntity.ok(menu);
         } catch (DateTimeParseException e) {
             throw new ResourceNotFoundException("Invalid date format");
+        }
+    }
+
+    @GetMapping("/{canteen}/buffet")
+    public ResponseEntity<BuffetMenu> getBuffetMenu(@PathVariable String canteen) {
+        try {
+            BuffetMenu menu = menuService.getBuffetMenu(canteen);
+            if (menu == null) {
+                throw new ResourceNotFoundException("Buffet menu for this canteen was not found");
+            }
+            return ResponseEntity.ok(menu);
+        } catch (DateTimeParseException e) {
+            throw new ResourceNotFoundException("Invalid canteen name");
         }
     }
 }

@@ -3,6 +3,7 @@ package cz.vse.menza_api.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cz.vse.menza_api.dto.menu.BuffetMenu;
 import cz.vse.menza_api.dto.menu.DailyMenu;
 import cz.vse.menza_api.dto.menu.WeeklyMenu;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class MenuService {
     public DailyMenu getMenuForDay(LocalDate date, String canteenName) {
         try {
             // Load JSON
-            Resource resource = resourceLoader.getResource(menuSource + canteenName + ".json");
+            Resource resource = resourceLoader.getResource(menuSource + canteenName + "/menu.json");
 
             // Transform to WeeklyMenu object
             WeeklyMenu weeklyMenu = objectMapper.readValue(resource.getInputStream(), WeeklyMenu.class);
@@ -53,4 +54,15 @@ public class MenuService {
             throw new RuntimeException("Error loading menu: " + e.getMessage(), e);
         }
     }
+
+    public BuffetMenu getBuffetMenu(String canteenName) {
+        try {
+            Resource resource = resourceLoader.getResource(menuSource + canteenName + "/buffet.json");
+
+            return objectMapper.readValue(resource.getInputStream(), BuffetMenu.class);
+        }catch (IOException e){
+            throw new RuntimeException("Error loading menu: " + e.getMessage(), e);
+        }
+    }
+
 }

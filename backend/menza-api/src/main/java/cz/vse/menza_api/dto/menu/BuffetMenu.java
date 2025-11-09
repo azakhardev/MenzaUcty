@@ -3,29 +3,29 @@ package cz.vse.menza_api.dto.menu;
 import java.util.List;
 
 public class BuffetMenu {
-    private List<Long> snacks;
-    private List<Long> drinks;
+    private List<BuffetItem> snacks;
+    private List<BuffetItem> drinks;
 
     public BuffetMenu() {}
 
-    public BuffetMenu(List<Long> snacks, List<Long> drinks) {
+    public BuffetMenu(List<BuffetItem> snacks, List<BuffetItem> drinks) {
         this.snacks = snacks;
         this.drinks = drinks;
     }
 
-    public List<Long> getSnacks() {
+    public List<BuffetItem> getSnacks() {
         return snacks;
     }
 
-    public void setSnacks(List<Long> snacks) {
+    public void setSnacks(List<BuffetItem> snacks) {
         this.snacks = snacks;
     }
 
-    public List<Long> getDrinks() {
+    public List<BuffetItem> getDrinks() {
         return drinks;
     }
 
-    public void setDrinks(List<Long> drinks) {
+    public void setDrinks(List<BuffetItem> drinks) {
         this.drinks = drinks;
     }
 }
