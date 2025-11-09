@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import cz.vse.menza_api.dto.menu.BuffetMenu;
 import cz.vse.menza_api.dto.menu.DailyMenu;
+import cz.vse.menza_api.dto.menu.DailyMenuResponse;
 import cz.vse.menza_api.dto.menu.WeeklyMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,7 @@ public class MenuService {
         this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    public DailyMenu getMenuForDay(LocalDate date, String canteenName) {
+    public DailyMenuResponse getMenuForDay(LocalDate date, String canteenName) {
         try {
             // Load JSON
             Resource resource = resourceLoader.getResource(menuSource + canteenName + "/menu.json");
@@ -45,10 +46,22 @@ public class MenuService {
             WeeklyMenu weeklyMenu = objectMapper.readValue(resource.getInputStream(), WeeklyMenu.class);
 
             // Find date by day
-            return weeklyMenu.getDays().stream()
+            DailyMenu dailyMenu = weeklyMenu.getDays().stream()
                     .filter(day -> day.getDate().equals(date))
                     .findFirst()
                     .orElse(null);
+
+
+            if (dailyMenu == null) {
+                return null;
+            }
+
+            DailyMenuResponse response = new DailyMenuResponse();
+
+            response.setMainCourses(mealService.getMealsByIds(dailyMenu.getMainCourses()));
+            response.setSoups(mealService.getMealsByIds(dailyMenu.getSoups()));
+
+            return response;
 
         } catch (IOException e) {
             throw new RuntimeException("Error loading menu: " + e.getMessage(), e);

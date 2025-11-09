@@ -2,6 +2,7 @@ package cz.vse.menza_api.controllers;
 
 import cz.vse.menza_api.dto.menu.BuffetMenu;
 import cz.vse.menza_api.dto.menu.DailyMenu;
+import cz.vse.menza_api.dto.menu.DailyMenuResponse;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.services.MenuService;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,10 @@ public class MenuController {
     }
 
     @GetMapping("/{canteen}/{date}")
-    public ResponseEntity<DailyMenu> getMenu(@PathVariable String canteen, @PathVariable String date) {
+    public ResponseEntity<DailyMenuResponse> getMenu(@PathVariable String canteen, @PathVariable String date) {
         try {
             LocalDate parsedDate = LocalDate.parse(date);
-            DailyMenu menu = menuService.getMenuForDay(parsedDate, canteen);
+            DailyMenuResponse menu = menuService.getMenuForDay(parsedDate, canteen);
             if (menu == null) {
                 throw new ResourceNotFoundException("Menu for this date was not found");
             }
