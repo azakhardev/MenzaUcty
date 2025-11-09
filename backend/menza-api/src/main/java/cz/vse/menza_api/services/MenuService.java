@@ -12,7 +12,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 @Service
@@ -36,10 +35,10 @@ public class MenuService {
         this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    public DailyMenu getMenuDay(LocalDate date) {
+    public DailyMenu getMenuForDay(LocalDate date, String canteenName) {
         try {
             // Load JSON
-            Resource resource = resourceLoader.getResource(menuSource);
+            Resource resource = resourceLoader.getResource(menuSource + canteenName + ".json");
 
             // Transform to WeeklyMenu object
             WeeklyMenu weeklyMenu = objectMapper.readValue(resource.getInputStream(), WeeklyMenu.class);

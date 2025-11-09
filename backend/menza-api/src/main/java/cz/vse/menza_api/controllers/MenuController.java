@@ -22,11 +22,11 @@ public class MenuController {
         this.menuService = menuService;
     }
 
-    @GetMapping("/{date}")
-    public ResponseEntity<DailyMenu> getMenu(@PathVariable String date) {
+    @GetMapping("/{canteen}/{date}")
+    public ResponseEntity<DailyMenu> getMenu(@PathVariable String canteen, @PathVariable String date) {
         try {
             LocalDate parsedDate = LocalDate.parse(date);
-            DailyMenu menu = menuService.getMenuDay(parsedDate);
+            DailyMenu menu = menuService.getMenuForDay(parsedDate, canteen);
             if (menu == null) {
                 throw new ResourceNotFoundException("Menu for this date was not found");
             }
