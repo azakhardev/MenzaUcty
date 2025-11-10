@@ -68,6 +68,20 @@ public class MenuService {
         }
     }
 
+    public WeeklyMenu getWeeklyMenu(String canteenName) {
+        try {
+            Resource resource = resourceLoader.getResource(menuSource + canteenName + "/menu.json");
+
+            WeeklyMenu weeklyMenu = objectMapper.readValue(resource.getInputStream(), WeeklyMenu.class);
+
+            return weeklyMenu;
+
+        }catch (Exception e){
+            throw new RuntimeException("Error loading menu: " + e.getMessage(), e);
+        }
+
+    }
+
     public BuffetMenu getBuffetMenu(String canteenName) {
         try {
             Resource resource = resourceLoader.getResource(menuSource + canteenName + "/buffet.json");
