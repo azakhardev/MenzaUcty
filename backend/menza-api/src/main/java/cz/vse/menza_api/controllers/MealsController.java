@@ -30,11 +30,18 @@ public class MealsController {
         this.ratingService = ratingService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Meal>> getAllMeals() {
+        List<Meal> meals = mealService.getAllMeals();
+        return ResponseEntity.ok(meals);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Meal> getMeal(@PathVariable Long id) {
         Meal meal = this.mealService.getMealDetail(id);
         return ResponseEntity.ok(meal);
     }
+
 
     @GetMapping("/{id}/history")
     public ResponseEntity<List<MealsHistory>> getMealHistory(@PathVariable Long id) {

@@ -63,4 +63,8 @@ public class MealService {
     public List<Alergen> getMealAllergens(Long mealId) {
         return mealRepository.findMealAlergens(mealId);
     }
+
+    public List<Meal> getAllMeals() {
+        return mealRepository.findAll();
+    }
 }
