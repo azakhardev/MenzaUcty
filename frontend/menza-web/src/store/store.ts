@@ -7,29 +7,28 @@ type StoreType = {
     setCurrentCanteen: (canteen: string) => void;
 };
 
-const useStore = create<StoreType>((set) => ({
+export const useCanteenStore = create<StoreType>((set) => ({
     userId: getUserId(),
     setUserId: (id) => {
-        localStorage.setItem("userId", id.toString());
+        sessionStorage.setItem("userId", id.toString());
         set({userId: id});
     },
 
     currentCanteen: getSavedCanteen(),
     setCurrentCanteen: (canteen) => {
-        localStorage.setItem("canteen", canteen);
+        sessionStorage.setItem("canteen", canteen);
         set({currentCanteen: canteen});
     },
 }));
 
 function getSavedCanteen(): string {
     if (typeof window === "undefined") return "avgastro";
-    return localStorage.getItem("canteen") ?? "avgastro";
+    return sessionStorage.getItem("canteen") ?? "avgastro";
 }
 
 function getUserId() {
     if (typeof window === "undefined") return undefined;
-    const id = localStorage.getItem("userId");
+    const id = sessionStorage.getItem("userId");
     return id ? parseInt(id) : undefined;
 }
 
-export default useStore;
