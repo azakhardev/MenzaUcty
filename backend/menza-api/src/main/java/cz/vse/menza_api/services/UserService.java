@@ -31,20 +31,20 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User updateUser(Long id, User updatedUser) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setUsername(updatedUser.getUsername());
-                    user.setPassword(updatedUser.getPassword());
-                    user.setBalance(updatedUser.getBalance());
-                    return userRepository.save(user);
-                })
-                .orElse(null);
-    }
+//    public User createUser(User user) {
+//        return userRepository.save(user);
+//    }
+//
+//    public User updateUser(Long id, User updatedUser) {
+//        return userRepository.findById(id)
+//                .map(user -> {
+//                    user.setUsername(updatedUser.getUsername());
+//                    user.setPassword(updatedUser.getPassword());
+//                    user.setBalance(updatedUser.getBalance());
+//                    return userRepository.save(user);
+//                })
+//                .orElse(null);
+//    }
 
     public User login(String username, String password) throws Exception {
         User user = userRepository.getUserByUsername(username);
