@@ -7,6 +7,13 @@ export default {
             mode: 'tags-split',
             target: 'src/api/generated.ts',
             schemas: 'src/api/models',
+            client: 'axios',
+            override: {
+                mutator: {
+                    path: 'src/api/axios.ts',
+                    name: 'api'
+                }
+            }
         },
     },
 };
