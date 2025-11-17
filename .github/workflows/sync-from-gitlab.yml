@@ -30,7 +30,7 @@ jobs:
       - name: Merge GitLab → GitHub main
         run: |
           git checkout main
-          git merge gitlab/main --allow-unrelated-histories --no-edit || echo "No changes to merge"
+          git merge gitlab/main -X theirs --allow-unrelated-histories --no-edit
       
       - name: Push updates to GitHub
         env:
