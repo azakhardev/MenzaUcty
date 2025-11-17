@@ -36,7 +36,5 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          echo "Token length: ${#GH_PAT}"  # This will show the token length without revealing it
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/azakhardev/MenzaUcty.git
-          git remote -v  # Show the remote URL (token will be hidden in logs)
           git push origin main
