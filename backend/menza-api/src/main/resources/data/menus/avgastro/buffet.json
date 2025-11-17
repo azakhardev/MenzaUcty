@@ -1,0 +1,18 @@
+{
+  "snacks": [
+    {
+      "name": "Bageta",
+      "price": 49
+    },
+    {
+      "name": "Snickers",
+      "price": 20
+    }
+  ],
+  "drinks": [
+    {
+      "name": "Dr.Witt",
+      "price": 25
+    }
+  ]
+}

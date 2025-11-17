@@ -1,0 +1,220 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "Controllers (API)" {
+    class UsersController {
+        - userService: UserService
+        --
+        + getUserById(Long): User
+        + getUserBalance(Long): BigDecimal
+        + getUserHistory(Long): List<Meal>
+        + login(LoginCredentials): User
+        + topUp(TopUpRequest): BigDecimal
+    }
+    class MealsController {
+        - mealService: MealService
+        - ratingService: RatingService
+        --
+        + getMeal(Long): List<Meal>
+        + getMealHistory(Long): List<MealHistory>
+        + getMealAllergens(Long): List<Allergen>
+        + getMealRatings(Long): RatingResponse
+    }
+    class MenuController {
+        - menuService MenuService
+        --
+        + getMenu(String, String): DailyMenuResponse 
+        + getBuffetMenu(String): BuffetMenu
+    }
+}
+
+package "Services (Business Logic)" {
+    class UserService {
+        - userRepository: UserRepository
+        - orderHistoryRepository: OrderHistoryRepository 
+        --
+        + getUserById(Long): User
+        + login(String, String): User
+        + topUpBalance(Long, BigDecimal): UserDTO
+        + getUserHistory(Long): List<Meal>
+    }
+    class MealService {
+        - mealRepository: MealRepository
+        - mealsHistoryRepository: MealsHistoryRepository
+        --
+        + getMealDetail(Long): Meal
+        + getMealsByIds(List<Long>): List<Meal>
+        + getMealOverivew(Long): MealOverview
+        + getMealHistory: List<MealsHistory>
+        
+        + rateMeal(userId, RatingDTO): RatingDTO
+    }
+    class MenuService {
+        - menuSource: String
+        - objectMapper: ObjectMapper
+        - mealsService: MealsService
+        - resourceLoader: ResourceLoader
+        --
+        + getMenuForDay(LoacalDate, String): DailyMenuResponse
+        + getBuffetMenu(Strin): BuffetMenu
+    }
+    class RatingService {
+        - ratingRespository: RatingRespository
+        --
+        + getRatingsByMealId(Long): List<Rating>
+    }
+}
+
+package "Repositories (Data Access)" {
+    interface UserRepository <<interface>> {
+      + getUserByUsername(String): User;
+    }
+    interface MealRepository <<interface>> {
+      + findMealAlergens(Long): List<Alergen>;
+    }
+    interface OrderHistoryRepository <<interface>> {
+      + findByUserId(Long): List<OrdersHistory>
+    }
+    interface RatingRepository <<interface>> {
+      + getRatingsByMeal_Id(Long): List<Rating>
+    }
+    interface MealsHistoryRepository <<interface>> {
+      + findByMeal_Id(Long): List<MealsHistory>
+    }
+}
+
+package "DTOs (Data Transfer)" {
+    class AddCreditDTO {
+        - amount: BigDecimal
+    }
+    class RatingDTO {
+        - mealId: Integer
+        - userId: Integer
+        - rating: RatingType
+    }
+    class UserDTO {
+        + id: Integer
+        + username: String
+        + balance: BigDecimal
+    }
+    class MealDTO {
+        + id: Integer
+        + name: String
+        + description: String
+        + price: BigDecimal
+        + averageRating: Double
+        + allergens: List<AlergenDTO>
+        ' ... další pole z Meal entity
+    }
+    class OrderDTO {
+        + id: Integer
+        + date: Date
+        + price: BigDecimal
+        + mealName: String
+        + mealId: Integer
+    }
+    class AlergenDTO {
+        + id: Integer
+        + name: String
+    }
+}
+
+package "Entities (Database)" {
+    entity User {
+        + id: integer
+        --
+        + username: varchar(255)
+        + balance: decimal(10,2)
+    }
+    entity Meal {
+        + id: integer
+        --
+        + name: varchar(255)
+        + description: text
+        + imageUrl: url
+        + weight: integer
+        + kcal: integer
+        + fats: integer
+        + proteins: integer
+        + carbs: integer
+        + category: varchar(256)
+    }
+    entity OrdersHistory {
+        + id: integer
+        --
+        + date: date
+        + mealId: integer
+        + userId: integer
+        + price: decimal(10,2)
+    }
+    
+    entity MealsHistory {
+        + id: integer
+        --
+        + mealId: integer
+        + date: date
+        + price: decimal(10,2)
+    }
+    entity Alergen {
+        + id: integer
+        --
+        + name: varchar(255)
+    }
+    entity MealsAlergens {
+        {field} + mealId: integer
+        {field} + alergenId: integer
+        --
+        + value: varchar(1024)
+    }
+    entity Rating {
+        {field} + mealId: integer
+        {field} + userId: integer
+        --
+        + rating: RatingType
+    }
+}
+
+' --- Relationships ---
+
+' Controller -> Service
+UsersController ..> UserService
+MealsController ..> MealService
+MealsController ..> RatingService
+MenuController ..> MenuService
+
+' Service -> Repository
+UserService ..> UserRepository
+UserService ..> OrderHistoryRepository
+MealService ..> MealRepository
+MealService ..> MealsHistoryRepository
+RatingService ..> RatingRepository
+
+' Repositories -> Entities
+UserRepository -- User
+MealRepository -- Meal
+RatingRepository -- Rating
+OrderHistoryRepository -- OrdersHistory
+MealsHistoryRepository -- MealsHistory
+
+' DTOs (used by Controllers and Services)
+UsersController ..> AddCreditDTO
+UsersController ..> UserDTO
+MealsController ..> MealDTO
+MealsController ..> RatingDTO
+
+UserService ..> UserDTO
+MealService ..> MealDTO
+MealService ..> RatingDTO
+
+Meal -- MealsHistory
+Meal -- OrdersHistory
+Meal -- MealsAlergens
+MealsAlergens -- Alergen
+Meal -- Rating
+
+User -- OrdersHistory
+User -- Rating
+
+@enduml
