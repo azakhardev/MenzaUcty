@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     api: {
         input: {
             target: 'http://localhost:8080/v3/api-docs.yaml',
@@ -11,9 +11,9 @@ export default {
             override: {
                 mutator: {
                     path: 'src/api/axios.ts',
-                    name: 'api'
-                }
-            }
+                    name: 'api',
+                },
+            },
         },
     },
 };

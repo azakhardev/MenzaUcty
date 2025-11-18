@@ -33,27 +33,6 @@ public class MenuController {
     }
 
     @Operation(
-            summary = "Get weekly menu",
-            description = "Retrieves the weekly menu for the specified canteen.",
-            parameters = {
-                    @Parameter(name = "canteen", description = "Canteen identifier", required = true)
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Weekly menu retrieved successfully",
-                            content = @Content(schema = @Schema(implementation = WeeklyMenu.class))
-                    ),
-                    @ApiResponse(responseCode = "404", description = "Canteen or menu not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-            }
-    )
-    @GetMapping("{canteen}")
-    public ResponseEntity<WeeklyMenu> getMenu(@PathVariable String canteen) {
-        WeeklyMenu menu = menuService.getWeeklyMenu(canteen);
-        return ResponseEntity.ok(menu);
-    }
-
-    @Operation(
             summary = "Get daily menu",
             description = "Retrieves the daily menu for a specific canteen and date.",
             parameters = {
