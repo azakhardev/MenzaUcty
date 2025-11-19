@@ -57,7 +57,7 @@ export default function Login() {
         <div className="flex h-full flex-row gap-20 justify-center items-center">
             <div className="flex-1 h-full flex flex-col justify-center items-center">
                 <form onSubmit={handleLogin}
-                      className="flex w-[25vw] flex-col items-center h-1/2 justify-between rounded-xl bg-white p-4 ">
+                      className="flex w-[25vw] flex-col items-center h-1/2 justify-between rounded-xl bg-card p-4 ">
                     <div className="flex flex-col gap-2 w-full">
                         <h2 className="text-2xl font-bold mb-4 text-center">Máte hlad? Přihlašte se!</h2>
                         <Input required name="username" placeholder="Username"/>
