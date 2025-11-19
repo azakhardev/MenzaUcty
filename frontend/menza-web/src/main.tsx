@@ -11,22 +11,27 @@ import HistoryPage from "./routes/HistoryPage.tsx";
 import MealDetailPage from "./routes/MealDetailPage.tsx";
 import CanteenOccupancyPage from "./routes/CanteenOccupancyPage.tsx";
 import ProtectedRoute from "./routes/ProtectedRoute.tsx";
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login/>}/>
-                <Route element={<ProtectedRoute/>}>
-                    <Route path="/" element={<MainLayout/>}>
-                        <Route index element={<Home/>}/>
-                        <Route path="menu" element={<MenuPage/>}/>
-                        <Route path="history" element={<HistoryPage/>}/>
-                        <Route path="menu/:id" element={<MealDetailPage/>}/>
-                        <Route path="occupancy/:canteenName" element={<CanteenOccupancyPage/>}/>
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route element={<ProtectedRoute/>}>
+                        <Route path="/" element={<MainLayout/>}>
+                            <Route index element={<Home/>}/>
+                            <Route path="menu" element={<MenuPage/>}/>
+                            <Route path="history" element={<HistoryPage/>}/>
+                            <Route path="menu/:id" element={<MealDetailPage/>}/>
+                            <Route path="occupancy/:canteenName" element={<CanteenOccupancyPage/>}/>
+                        </Route>
                     </Route>
-                </Route>
-            </Routes>
-        </BrowserRouter>
+                </Routes>
+            </BrowserRouter>
+        </QueryClientProvider>
     </StrictMode>
 )

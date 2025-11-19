@@ -5,54 +5,42 @@
  * OpenAPI spec version: v0
  */
 import type {
-  BuffetMenu,
-  DailyMenuResponse,
-  WeeklyMenu
+    BuffetMenu,
+    DailyMenuResponse
 } from '.././models';
 
-import { api } from '.././axios';
+import {api} from '.././axios';
 
 
-
-  export const getMenu = () => {
-/**
- * Retrieves the weekly menu for the specified canteen.
- * @summary Get weekly menu
- */
-const getMenu = (
-    canteen: string,
- ) => {
-      return api<WeeklyMenu>(
-      {url: `/menu/${canteen}`, method: 'GET'
-    },
-      );
+export const getMenu = () => {
+    /**
+     * Retrieves the daily menu for a specific canteen and date.
+     * @summary Get daily menu
+     */
+    const getMenu = (
+        canteen: string,
+        date: string,
+    ) => {
+        return api<DailyMenuResponse>(
+            {
+                url: `/menu/${canteen}/${date}`, method: 'GET'
+            },
+        );
     }
-  /**
- * Retrieves the daily menu for a specific canteen and date.
- * @summary Get daily menu
- */
-const getMenu1 = (
-    canteen: string,
-    date: string,
- ) => {
-      return api<DailyMenuResponse>(
-      {url: `/menu/${canteen}/${date}`, method: 'GET'
-    },
-      );
+    /**
+     * Retrieves the buffet menu for a specific canteen.
+     * @summary Get buffet menu
+     */
+    const getBuffetMenu = (
+        canteen: string,
+    ) => {
+        return api<BuffetMenu>(
+            {
+                url: `/menu/${canteen}/buffet`, method: 'GET'
+            },
+        );
     }
-  /**
- * Retrieves the buffet menu for a specific canteen.
- * @summary Get buffet menu
- */
-const getBuffetMenu = (
-    canteen: string,
- ) => {
-      return api<BuffetMenu>(
-      {url: `/menu/${canteen}/buffet`, method: 'GET'
-    },
-      );
-    }
-  return {getMenu,getMenu1,getBuffetMenu}};
+    return {getMenu, getBuffetMenu}
+};
 export type GetMenuResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getMenu']>>>
-export type GetMenu1Result = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getMenu1']>>>
 export type GetBuffetMenuResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getBuffetMenu']>>>
