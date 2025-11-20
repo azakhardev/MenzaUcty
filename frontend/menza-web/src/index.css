@@ -6,3 +6,12 @@ html, body, #root {
   height: 100%; /* optional, useful if you want full-height layouts */
   background-color: #CCCCCC;
 }
+
+@theme {
+  --color-card: #F2F2F2;
+  --color-background: #CCCCCC;
+  --color-button: #6B9AFF;
+  --color-surface: #7F7F7F;
+  --color-text: #000000;
+  --color-text-on-dark: #E3E3E3;
+}
