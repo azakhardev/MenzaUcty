@@ -1,8 +1,6 @@
-import {useParams} from "react-router";
+import {useCanteenStore} from "../store/store.ts";
 
 export default function CanteenOccupancyPage(){
-    const params = useParams();
-    const canteenName = params.canteenName;
-
-    return <div>Occupancy for canteen {canteenName}</div>
+    const currentCanteen = useCanteenStore(set => set.currentCanteen);
+    return <div>Occupancy for canteen {currentCanteen}</div>
 }

@@ -12,23 +12,21 @@ import type {LoginCredentials} from "../api/models";
 import type {AxiosError} from "axios";
 
 export default function Login() {
-    const {userId, canteen, setUserId} = useCanteenStore(useShallow(set => ({
-        userId: set.userId,
+    const {user, canteen, setUser} = useCanteenStore(useShallow(set => ({
+        user: set.user,
         canteen: set.currentCanteen,
-        setUserId: set.setUserId
+        setUser: set.setUser,
     })));
-
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const {getMenu} = getMenuFunctions();
     const {login} = getUsers();
-
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (userId !== null && userId !== undefined) {
+        if (user !== null && user !== undefined) {
             navigate("/");
         }
-    }, [userId])
+    }, [user])
 
     async function handleLogin(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -48,7 +46,7 @@ export default function Login() {
         mutationFn: (credentials) => login(credentials),
         onError: () => setErrorMessage("Špatné přihlašovací údaje"),
         onSuccess: (data) => {
-            setUserId(data.data.id!);
+            setUser(data.data);
             setErrorMessage(null);
         },
     })

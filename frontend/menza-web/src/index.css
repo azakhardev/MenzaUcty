@@ -9,8 +9,13 @@ html, body, #root {
 
 @theme {
   --color-card: #F2F2F2;
+  --color-card-border: #959494;
+  --color-border: #757575;
   --color-background: #CCCCCC;
-  --color-button: #6B9AFF;
+  --color-button-primary: #6B9AFF;
+  --color-button-primary-hover: #5e8fff;
+  --color-button-secondary: #b1b1b1;
+  --color-button-secondary-hover: #c8c8c8;
   --color-surface: #7F7F7F;
   --color-text: #000000;
   --color-text-on-dark: #E3E3E3;
