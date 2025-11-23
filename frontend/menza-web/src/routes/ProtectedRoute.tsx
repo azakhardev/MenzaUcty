@@ -2,10 +2,10 @@ import {Navigate, Outlet} from "react-router";
 import {useCanteenStore} from "../store/store.ts";
 
 export default function ProtectedRoute() {
-    const userId = useCanteenStore((state) => state.userId);
+    const user = useCanteenStore((state) => state.user);
 
     const isAuthenticated =
-        userId !== undefined || sessionStorage.getItem("userId") !== null;
+        user !== undefined || sessionStorage.getItem("user") !== null;
 
     return isAuthenticated ? <Outlet/> : <Navigate to="/login" replace/>;
 }
