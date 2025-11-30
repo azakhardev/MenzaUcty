@@ -5,42 +5,40 @@
  * OpenAPI spec version: v0
  */
 import type {
-    BuffetMenu,
-    DailyMenuResponse
+  BuffetMenu,
+  DailyMenuResponse
 } from '.././models';
 
-import {api} from '.././axios';
+import { api } from '.././axios';
 
 
-export const getMenu = () => {
-    /**
-     * Retrieves the daily menu for a specific canteen and date.
-     * @summary Get daily menu
-     */
-    const getMenu = (
-        canteen: string,
-        date: string,
-    ) => {
-        return api<DailyMenuResponse>(
-            {
-                url: `/menu/${canteen}/${date}`, method: 'GET'
-            },
-        );
+
+  export const getMenu = () => {
+/**
+ * Retrieves the daily menu for a specific canteen and date.
+ * @summary Get daily menu
+ */
+const getMenu = (
+    canteen: string,
+    date: string,
+ ) => {
+      return api<DailyMenuResponse>(
+      {url: `/menu/${canteen}/${date}`, method: 'GET'
+    },
+      );
     }
-    /**
-     * Retrieves the buffet menu for a specific canteen.
-     * @summary Get buffet menu
-     */
-    const getBuffetMenu = (
-        canteen: string,
-    ) => {
-        return api<BuffetMenu>(
-            {
-                url: `/menu/${canteen}/buffet`, method: 'GET'
-            },
-        );
+  /**
+ * Retrieves the buffet menu for a specific canteen.
+ * @summary Get buffet menu
+ */
+const getBuffetMenu = (
+    canteen: string,
+ ) => {
+      return api<BuffetMenu>(
+      {url: `/menu/${canteen}/buffet`, method: 'GET'
+    },
+      );
     }
-    return {getMenu, getBuffetMenu}
-};
+  return {getMenu,getBuffetMenu}};
 export type GetMenuResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getMenu']>>>
 export type GetBuffetMenuResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getBuffetMenu']>>>

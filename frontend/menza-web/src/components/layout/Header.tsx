@@ -9,7 +9,7 @@ export default function Header() {
 
     return <div className="w-full bg-surface text-text-on-dark flex flex-col items-center justify-center">
         <div className="sticky top-0 w-full p-4 flex flex-row justify-between items-center">
-            <div className="rounded bg-card text-text px-4 py-2">
+            <div className="rounded bg-card text-text text-center hidden sm:block px-4 py-2">
                 <strong>Zůstatek: </strong>
                 <span className="text-green-700">
                 {user?.balance} CZK

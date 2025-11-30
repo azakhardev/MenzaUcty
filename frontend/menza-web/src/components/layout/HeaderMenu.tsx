@@ -26,11 +26,11 @@ export default function HeaderMenu() {
         return () => document.removeEventListener("mousedown", onClickOutside);
     }, []);
 
-    return <div ref={ref} className="relative">
+    return <div ref={ref} className="relative z-50!">
         <div className="flex flex-row gap-2 items-center">
             <p className="text-xl">{user?.username}</p>
             <button onClick={() => setIsOpen(old => !old)}
-                    className="bg-button-secondary rounded-full flex items-center justify-center p-2 cursor-pointer hover:bg-button-secondary-hover transition-all">
+                    className={`bg-button-secondary rounded-full flex items-center justify-center p-1 sm:p-2 cursor-pointer border-2 border-transparent hover:bg-button-secondary-hover transition-all ${isOpen && "border-border-contrast!"}`}>
                 <User color="black" size={36}/>
             </button>
         </div>
