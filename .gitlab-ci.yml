@@ -1,0 +1,72 @@
+# Definuje fáze (stages), ve kterých se budou joby spouštět.
+stages:
+  - build_backend
+  - build_frontend
+
+# ====================================================================
+# BACKEND BUILD JOB
+# Sestavení Spring Boot REST API
+# ====================================================================
+
+build_backend_job:
+  stage: build_backend
+  # Používá Docker image s Java a Maven pro sestavení Spring Boot aplikace.
+  image: maven:3.8-openjdk-17
+
+  # Cache pro Maven závislosti zrychlí následující spuštění.
+  cache:
+    key: "$CI_COMMIT_REF_SLUG-backend"
+    paths:
+      - backend/menza-api/.m2/repository
+
+  script:
+    - echo "Spouštím sestavení Backend API..."
+    # Přesun do adresáře s backend aplikací
+    - cd backend/menza-api
+    # Nastavení práv pro spuštění Maven Wrapper skriptu
+    - chmod +x ./mvnw
+    # Vytvoření adresáře pro Maven cache (pokud neexistuje)
+    - mkdir -p .m2/repository
+    # Sestavení a balení aplikace pomocí Maven Wrapper (přeskočí testy pro rychlejší build v CI)
+    - ./mvnw package -DskipTests
+    - echo "Sestavení Backend API dokončeno."
+
+  # Vytvořený JAR/WAR artefakt bude dostupný ke stažení v GitLabu
+  artifacts:
+    paths:
+      # Cesta k výslednému JAR souboru
+      - backend/menza-api/target/*.jar
+    expire_in: 1 week
+
+# ====================================================================
+# FRONTEND BUILD JOB
+# Sestavení React aplikace
+# ====================================================================
+
+build_frontend_job:
+  stage: build_frontend
+  # Používá Docker image s Node.js pro sestavení React aplikace.
+  image: node:18.19.1
+
+  # Cache pro Node moduly (npm/yarn)
+  cache:
+    key: "$CI_COMMIT_REF_SLUG-frontend"
+    paths:
+      - frontend/menza-web/node_modules/
+
+  script:
+    - echo "Spouštím sestavení Frontend React aplikace..."
+    # Přesun do adresáře s frontend aplikací
+    - cd frontend/menza-web
+    # Instalace Node.js závislostí
+    - npm install
+    # Spuštění build skriptu pro vytvoření produkčního balíčku
+    - npm run build
+    - echo "Sestavení Frontend aplikace dokončeno."
+
+  # Vytvořený produkční balíček (statické soubory)
+  artifacts:
+    paths:
+      # Cesta k adresáři s hotovým buildem Reactu
+      - frontend/menza-web/dist/
+    expire_in: 1 week

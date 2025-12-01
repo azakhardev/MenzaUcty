@@ -11,6 +11,7 @@ html, body, #root {
   --color-card: #F2F2F2;
   --color-card-border: #959494;
   --color-border: #757575;
+  --color-border-contrast: #1659FFBA;
   --color-background: #CCCCCC;
   --color-button-primary: #6B9AFF;
   --color-button-primary-hover: #5e8fff;

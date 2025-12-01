@@ -1,18 +1,19 @@
 import {useEffect, useState} from "react";
-import type {WeeklyMenu} from "../api/models";
+import type {DailyMenuResponse} from "../api/models";
 import {useCanteenStore} from "../store/store.ts";
 import {getMenu} from "../api/menu/menu.ts";
+import {dateToMenuString} from "../utils/dateUtils.ts";
 
 export default function Home() {
 
     const axiosMenu = getMenu();
     const canteen = useCanteenStore(state => state.currentCanteen);
 
-    const [menu, setMenu] = useState<WeeklyMenu>();
+    const [menu, setMenu] = useState<DailyMenuResponse>();
 
     useEffect(() => {
         async function loadMenu() {
-            const response = await axiosMenu.getMenu(canteen);
+            const response = await axiosMenu.getMenu(canteen, dateToMenuString(new Date()));
 
             const data = response.data;
 
@@ -25,20 +26,7 @@ export default function Home() {
 
     return <div>
         {!menu ? <p>Loading....</p> : <div className="flex flex-col gap-2">
-            <h2 className="text-3xl">Dny</h2>
-            {menu.days?.map((d) => {
-                return <div className="flex flex-col gap-1">
-                    <h3 className="text-2xl">{d.date}</h3>
-                    <h4 className="text-xl">Hlavní jídla</h4>
-                    <div>
-                        {JSON.stringify(d.mainCourses)}
-                    </div>
-                    <h4 className="text-xl">Polévky</h4>
-                    <div>
-                        {JSON.stringify(d.soups)}
-                    </div>
-                </div>
-            })}
+            Seznam jídel
         </div>}
     </div>
 }

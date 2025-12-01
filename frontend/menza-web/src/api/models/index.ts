@@ -14,6 +14,8 @@ export * from './dailyMenuResponse';
 export * from './loginCredentials';
 export * from './meal';
 export * from './mealsHistory';
+export * from './occupancyResponseDto';
+export * from './occupancyResponseDtoOccupancy';
 export * from './ratingResponse';
 export * from './topUpRequest';
 export * from './user';
