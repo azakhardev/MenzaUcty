@@ -1,5 +1,6 @@
 package cz.vse.menza_api.controllers;
 
+import cz.vse.menza_api.dto.ApiErrorResponse;
 import cz.vse.menza_api.dto.OccupancyResponseDto;
 import cz.vse.menza_api.services.OccupancyService;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
@@ -15,6 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/occupancy")
 @Tag(name = "Canteen Occupancy", description = "Retrieve current occupancy data for canteens by day and hour.")
+@ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Invalid or missing token",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+        )
+)
 public class OccupancyController {
 
     private final OccupancyService occupancyService;

@@ -26,7 +26,7 @@ export default function CanteenOccupancyPage() {
     const occupancyQuery = useQuery({
         queryFn: async () => getOccupancy(currentCanteen),
         queryKey: ["occupancy", currentCanteen],
-        select: data => data.data.occupancy
+        select: data => data.occupancy
     })
 
     useEffect(() => {

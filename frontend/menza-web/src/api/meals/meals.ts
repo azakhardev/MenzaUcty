@@ -14,6 +14,8 @@ import type {
 import { api } from '.././axios';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
   export const getMeals = () => {
 /**
@@ -22,11 +24,11 @@ import { api } from '.././axios';
  */
 const getAllMeals = (
     
- ) => {
+ options?: SecondParameter<typeof api<Meal[]>>,) => {
       return api<Meal[]>(
       {url: `/meals`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves detailed information about a specific meal by its ID.
@@ -34,11 +36,11 @@ const getAllMeals = (
  */
 const getMeal = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<Meal>>,) => {
       return api<Meal>(
       {url: `/meals/${id}`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Returns the number of likes and dislikes for a specific meal.
@@ -46,11 +48,11 @@ const getMeal = (
  */
 const getMealRatings = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<RatingResponse>>,) => {
       return api<RatingResponse>(
       {url: `/meals/${id}/rating`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves the historical price and availability data for a specific meal.
@@ -58,11 +60,11 @@ const getMealRatings = (
  */
 const getMealHistory = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<MealsHistory[]>>,) => {
       return api<MealsHistory[]>(
       {url: `/meals/${id}/history`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Returns a list of allergens associated with a specific meal.
@@ -70,11 +72,11 @@ const getMealHistory = (
  */
 const getMealAllergens = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<Alergen[]>>,) => {
       return api<Alergen[]>(
       {url: `/meals/${id}/allergens`, method: 'GET'
     },
-      );
+      options);
     }
   return {getAllMeals,getMeal,getMealRatings,getMealHistory,getMealAllergens}};
 export type GetAllMealsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMeals>['getAllMeals']>>>

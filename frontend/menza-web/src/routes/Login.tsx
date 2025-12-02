@@ -7,7 +7,7 @@ import Button from "../components/ui/Button.tsx";
 import {getMenu as getMenuFunctions} from "../api/menu/menu.ts";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {dateToMenuString} from "../utils/dateUtils.ts";
-import {getUsers, type LoginResult} from "../api/users/users.ts";
+import {getAuthentication, type LoginResult} from "../api/authentication/authentication.ts";
 import type {LoginCredentials} from "../api/models";
 import type {AxiosError} from "axios";
 
@@ -19,7 +19,7 @@ export default function Login() {
     })));
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const {getMenu} = getMenuFunctions();
-    const {login} = getUsers();
+    const {login} = getAuthentication();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,14 +39,14 @@ export default function Login() {
     const menuQuery = useQuery({
         queryFn: () => getMenu(canteen, dateToMenuString(new Date())),
         queryKey: ["menu", canteen],
-        select: (data) => data.data
     })
 
     const mutation = useMutation<LoginResult, AxiosError, LoginCredentials>({
         mutationFn: (credentials) => login(credentials),
         onError: () => setErrorMessage("Špatné přihlašovací údaje"),
         onSuccess: (data) => {
-            setUser(data.data);
+            setUser(data.user);
+            window.sessionStorage.setItem("token", data.token! );
             setErrorMessage(null);
         },
     })

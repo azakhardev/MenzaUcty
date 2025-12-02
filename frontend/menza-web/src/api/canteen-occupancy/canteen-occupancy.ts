@@ -11,6 +11,8 @@ import type {
 import { api } from '.././axios';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
   export const getCanteenOccupancy = () => {
 /**
@@ -19,11 +21,11 @@ import { api } from '.././axios';
  */
 const getOccupancy = (
     canteen: string,
- ) => {
+ options?: SecondParameter<typeof api<OccupancyResponseDto>>,) => {
       return api<OccupancyResponseDto>(
       {url: `/occupancy/${canteen}`, method: 'GET'
     },
-      );
+      options);
     }
   return {getOccupancy}};
 export type GetOccupancyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCanteenOccupancy>['getOccupancy']>>>

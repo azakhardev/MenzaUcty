@@ -28,6 +28,14 @@ import java.util.List;
         name = "Meals",
         description = "Endpoints for retrieving meal details, history, allergens, and ratings."
 )
+@ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Invalid or missing token",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+        )
+)
 public class MealsController {
 
     private final MealService mealService;
