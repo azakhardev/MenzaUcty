@@ -25,6 +25,14 @@ import java.util.List;
         name = "Users",
         description = "Endpoints for user management, authentication, balance, and order history."
 )
+@ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Invalid or missing token",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+        )
+)
 public class UsersController {
 
     private final UserService userService;
@@ -113,30 +121,6 @@ public class UsersController {
     public ResponseEntity<List<Meal>> getUserHistory(@PathVariable Long id) {
         List<Meal> history = userService.getUserHistory(id);
         return ResponseEntity.ok(history);
-    }
-
-    @Operation(
-            summary = "User login",
-            description = "Authenticates a user with username and password.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Login credentials",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = LoginCredentials.class))
-            ),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Login successful",
-                            content = @Content(schema = @Schema(implementation = User.class))
-                    ),
-                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
-                    @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
-            }
-    )
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginCredentials user) throws Exception {
-        User u = userService.login(user.getUsername(), user.getPassword());
-        return ResponseEntity.ok(u);
     }
 
     @Operation(

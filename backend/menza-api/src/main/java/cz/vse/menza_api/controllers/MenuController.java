@@ -24,6 +24,14 @@ import java.time.format.DateTimeParseException;
         name = "Menu",
         description = "Endpoints for retrieving weekly, daily, and buffet menus for different canteens."
 )
+@ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Invalid or missing token",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+        )
+)
 public class MenuController {
 
     private final MenuService menuService;

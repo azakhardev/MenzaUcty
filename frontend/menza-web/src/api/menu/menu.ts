@@ -12,6 +12,8 @@ import type {
 import { api } from '.././axios';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
   export const getMenu = () => {
 /**
@@ -21,11 +23,11 @@ import { api } from '.././axios';
 const getMenu = (
     canteen: string,
     date: string,
- ) => {
+ options?: SecondParameter<typeof api<DailyMenuResponse>>,) => {
       return api<DailyMenuResponse>(
       {url: `/menu/${canteen}/${date}`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves the buffet menu for a specific canteen.
@@ -33,11 +35,11 @@ const getMenu = (
  */
 const getBuffetMenu = (
     canteen: string,
- ) => {
+ options?: SecondParameter<typeof api<BuffetMenu>>,) => {
       return api<BuffetMenu>(
       {url: `/menu/${canteen}/buffet`, method: 'GET'
     },
-      );
+      options);
     }
   return {getMenu,getBuffetMenu}};
 export type GetMenuResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getMenu>['getMenu']>>>

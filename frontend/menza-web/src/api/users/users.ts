@@ -5,7 +5,6 @@
  * OpenAPI spec version: v0
  */
 import type {
-  LoginCredentials,
   Meal,
   TopUpRequest,
   User
@@ -13,6 +12,8 @@ import type {
 
 import { api } from '.././axios';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
   export const getUsers = () => {
@@ -22,27 +23,13 @@ import { api } from '.././axios';
  */
 const topUp = (
     topUpRequest: TopUpRequest,
- ) => {
+ options?: SecondParameter<typeof api<number>>,) => {
       return api<number>(
       {url: `/users/topup`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: topUpRequest
     },
-      );
-    }
-  /**
- * Authenticates a user with username and password.
- * @summary User login
- */
-const login = (
-    loginCredentials: LoginCredentials,
- ) => {
-      return api<User>(
-      {url: `/users/login`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginCredentials
-    },
-      );
+      options);
     }
   /**
  * Retrieves a list of all users.
@@ -50,11 +37,11 @@ const login = (
  */
 const getAllUsers = (
     
- ) => {
+ options?: SecondParameter<typeof api<User[]>>,) => {
       return api<User[]>(
       {url: `/users`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves detailed information about a specific user by their ID.
@@ -62,11 +49,11 @@ const getAllUsers = (
  */
 const getUserById = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<User>>,) => {
       return api<User>(
       {url: `/users/${id}`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves a list of meals ordered by the user.
@@ -74,11 +61,11 @@ const getUserById = (
  */
 const getUserHistory = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<Meal[]>>,) => {
       return api<Meal[]>(
       {url: `/users/${id}/history`, method: 'GET'
     },
-      );
+      options);
     }
   /**
  * Retrieves the current balance of a user by their ID.
@@ -86,15 +73,14 @@ const getUserHistory = (
  */
 const getUserBalance = (
     id: number,
- ) => {
+ options?: SecondParameter<typeof api<number>>,) => {
       return api<number>(
       {url: `/users/${id}/balance`, method: 'GET'
     },
-      );
+      options);
     }
-  return {topUp,login,getAllUsers,getUserById,getUserHistory,getUserBalance}};
+  return {topUp,getAllUsers,getUserById,getUserHistory,getUserBalance}};
 export type TopUpResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUsers>['topUp']>>>
-export type LoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUsers>['login']>>>
 export type GetAllUsersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUsers>['getAllUsers']>>>
 export type GetUserByIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUsers>['getUserById']>>>
 export type GetUserHistoryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUsers>['getUserHistory']>>>

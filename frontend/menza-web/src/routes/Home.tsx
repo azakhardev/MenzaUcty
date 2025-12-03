@@ -15,9 +15,7 @@ export default function Home() {
         async function loadMenu() {
             const response = await axiosMenu.getMenu(canteen, dateToMenuString(new Date()));
 
-            const data = response.data;
-
-            setMenu(data);
+            setMenu(response);
         }
 
         loadMenu();

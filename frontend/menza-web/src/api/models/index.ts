@@ -7,6 +7,7 @@
 
 export * from './alergen';
 export * from './apiErrorResponse';
+export * from './authResponse';
 export * from './buffetItem';
 export * from './buffetMenu';
 export * from './dailyMenu';
