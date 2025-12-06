@@ -89,11 +89,6 @@ export default function MealDetailPage() {
                 <div className="meal-info-section">
                     <h1>{meal.name}</h1>
                     <p className="description">{meal.description}</p>
-                    
-                    <div className="price-box">
-                        <span>Cena</span>
-                        <span className="price-value">{meal.price},-</span>
-                    </div>
 
                     <h3>Alergeny</h3>
                     <ul className="allergens-list">
