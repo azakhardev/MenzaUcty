@@ -17,7 +17,7 @@ public class MealsAlergens {
     @JoinColumn(name = "alergenId", nullable = false)
     private Alergen alergen;
 
-    @Column(length = 1024)
+    @Column(name = "`value`", length = 1024)
     private String value;
 
     // Getters and setters

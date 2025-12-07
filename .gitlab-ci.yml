@@ -1,7 +1,42 @@
-# Definuje fáze (stages), ve kterých se budou joby spouštět.
 stages:
+  - test_backend
   - build_backend
   - build_frontend
+
+# ====================================================================
+# SDOÍLENÉ NASTAVENÍ (Global Cache)
+# ====================================================================
+# Aby se Maven závislosti nestahovaly dvakrát (jednou pro test, jednou pro build),
+# definujeme cache globálně nebo použijeme stejný klíč.
+cache:
+  key: "$CI_COMMIT_REF_SLUG-backend"
+  paths:
+    - backend/menza-api/.m2/repository
+
+# ====================================================================
+# BACKEND TEST JOB (NOVÝ)
+# Spustí Unit testy. Pokud selžou, pipeline se zastaví.
+# ====================================================================
+test_backend_job:
+  stage: test_backend
+  image: maven:3.8-openjdk-17
+
+  script:
+    - echo "Spouštím testy Backend API..."
+    - cd backend/menza-api
+    - chmod +x ./mvnw
+    - mkdir -p .m2/repository
+    # Zde spouštíme POUZE testy.
+    # '-Dmaven.repo.local=.m2/repository' říká Mavenu, aby použil naši cache složku
+    - ./mvnw test -Dmaven.repo.local=.m2/repository
+    - echo "Testy dokončeny úspěšně."
+
+  # Toto zajistí, že GitLab uvidí výsledky testů (počet prošlých/chybných) v hezkém grafu
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - backend/menza-api/target/surefire-reports/TEST-*.xml
 
 # ====================================================================
 # BACKEND BUILD JOB
@@ -10,31 +45,22 @@ stages:
 
 build_backend_job:
   stage: build_backend
-  # Používá Docker image s Java a Maven pro sestavení Spring Boot aplikace.
+  # Job se spustí jen pokud projde předchozí stage 'test'
+  needs: ["test_backend_job"]
   image: maven:3.8-openjdk-17
-
-  # Cache pro Maven závislosti zrychlí následující spuštění.
-  cache:
-    key: "$CI_COMMIT_REF_SLUG-backend"
-    paths:
-      - backend/menza-api/.m2/repository
 
   script:
     - echo "Spouštím sestavení Backend API..."
-    # Přesun do adresáře s backend aplikací
     - cd backend/menza-api
-    # Nastavení práv pro spuštění Maven Wrapper skriptu
     - chmod +x ./mvnw
-    # Vytvoření adresáře pro Maven cache (pokud neexistuje)
     - mkdir -p .m2/repository
-    # Sestavení a balení aplikace pomocí Maven Wrapper (přeskočí testy pro rychlejší build v CI)
-    - ./mvnw package -DskipTests
+    # Zde necháváme -DskipTests, protože testy už proběhly v předchozím kroku!
+    # Ušetříme tím čas.
+    - ./mvnw package -DskipTests -Dmaven.repo.local=.m2/repository
     - echo "Sestavení Backend API dokončeno."
 
-  # Vytvořený JAR/WAR artefakt bude dostupný ke stažení v GitLabu
   artifacts:
     paths:
-      # Cesta k výslednému JAR souboru
       - backend/menza-api/target/*.jar
     expire_in: 1 week
 
@@ -45,10 +71,9 @@ build_backend_job:
 
 build_frontend_job:
   stage: build_frontend
-  # Používá Docker image s Node.js pro sestavení React aplikace.
   image: node:18.19.1
 
-  # Cache pro Node moduly (npm/yarn)
+  # Frontend má vlastní cache (node_modules), takže přepíšeme tu globální
   cache:
     key: "$CI_COMMIT_REF_SLUG-frontend"
     paths:
@@ -56,17 +81,12 @@ build_frontend_job:
 
   script:
     - echo "Spouštím sestavení Frontend React aplikace..."
-    # Přesun do adresáře s frontend aplikací
     - cd frontend/menza-web
-    # Instalace Node.js závislostí
     - npm install
-    # Spuštění build skriptu pro vytvoření produkčního balíčku
     - npm run build
     - echo "Sestavení Frontend aplikace dokončeno."
 
-  # Vytvořený produkční balíček (statické soubory)
   artifacts:
     paths:
-      # Cesta k adresáři s hotovým buildem Reactu
       - frontend/menza-web/dist/
     expire_in: 1 week
