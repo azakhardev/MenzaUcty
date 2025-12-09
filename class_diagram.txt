@@ -28,6 +28,12 @@ package "Controllers (API)" {
         + getMenu(String, String): DailyMenuResponse 
         + getBuffetMenu(String): BuffetMenu
     }
+    class AuthController {
+        - userService: UserService
+        - jwtService: JwtService
+        --
+        + login(LoginCredentials): AuthReponse
+    }
 }
 
 package "Services (Business Logic)" {
@@ -64,6 +70,16 @@ package "Services (Business Logic)" {
         - ratingRespository: RatingRespository
         --
         + getRatingsByMealId(Long): List<Rating>
+    }
+    class JwtService {
+        - secretKey: String
+        --
+        + extractUsername(String): String
+        - createToken(Map<String, Object>, String): String
+        + isTokenValid(String, String): Boolean
+        - extractExpiration(String): date
+        - extractAllClaims(String token): extractAllClaims
+        - getSigningKey: Key
     }
 }
 
