@@ -8,8 +8,10 @@ import cz.vse.menza_api.models.OrdersHistory;
 import cz.vse.menza_api.repositories.OrderHistoryRepository;
 import java.util.stream.Collectors;
 import cz.vse.menza_api.repositories.UserRepository;
+import cz.vse.menza_api.dto.history.UserHistoryItemDto;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -67,15 +69,33 @@ public class UserService {
         return newBalance;
     }
 
-    public List<Meal> getUserHistory(Long userId) throws ResourceNotFoundException {
+    public List<UserHistoryItemDto> getUserHistory(Long userId) throws ResourceNotFoundException {
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
+        // 1. Získame históriu transakcií
         List<OrdersHistory> historyRecords = ordersHistoryRepository.findByUserId(userId);
 
+        // Zotriedime od najnovšieho k najstaršiemu dátumu
+        historyRecords.sort(Comparator.comparing(OrdersHistory::getDate).reversed());
+
+        // 2. Mapovanie z entít na DTO
         return historyRecords.stream()
-                .map(OrdersHistory::getMeal)
+                .map(record -> {
+                    // Získame Meal entitu (vďaka JPA @ManyToOne prepojeniu)
+                    Meal meal = record.getMeal();
+
+                    return new UserHistoryItemDto(
+                            record.getId(),
+                            // Dávame názov, ktorý bude frontend čítať ako 'name'
+                            meal != null ? meal.getName() : "Názov nebol nájdený",
+                            record.getDate(), // Dátum transakcie
+                            record.getPrice(), // Cena transakcie
+                            meal != null ? meal.getKcal() : null // Kalórie
+                    );
+                })
                 .collect(Collectors.toList());
     }
+
 }
