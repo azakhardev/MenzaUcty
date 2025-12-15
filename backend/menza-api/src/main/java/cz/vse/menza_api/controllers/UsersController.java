@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import cz.vse.menza_api.dto.history.UserHistoryItemDto;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -112,14 +114,15 @@ public class UsersController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "User meal history retrieved successfully",
-                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Meal.class)))
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserHistoryItemDto.class)))
                     ),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
     @GetMapping("/{id}/history")
-    public ResponseEntity<List<Meal>> getUserHistory(@PathVariable Long id) {
-        List<Meal> history = userService.getUserHistory(id);
+    public ResponseEntity<List<UserHistoryItemDto>> getUserHistory(@PathVariable Long id) {
+        // Zavoláme opravenú metódu v Service, ktorá vracia DTO
+        List<UserHistoryItemDto> history = userService.getUserHistory(id);
         return ResponseEntity.ok(history);
     }
 
