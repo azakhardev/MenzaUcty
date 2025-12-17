@@ -12,6 +12,7 @@ import {RATINGS} from "../utils/constants.ts";
 import {useMealRatingMutation} from "../hooks/useMealRatingMutation";
 import {useCanteenStore} from "../store/store.ts";
 import BackButton from "../components/BackButton.tsx";
+import MealDetailSkeleton from "../components/ui/loaders/MealDetailSkeleton.tsx";
 
 type MealDetail = MealResponse & RatingResponse & { allergens: string[], history: MealsHistory[] }
 
@@ -49,76 +50,94 @@ export default function MealDetailPage() {
     const {handleRateClick} = useMealRatingMutation({mealId: idAsNumber!, userId: user?.id});
 
     if (mealQuery.isLoading) {
-        return <div>Loading details...</div>;
+        return <MealDetailSkeleton/>;
     }
 
     if (mealQuery.isError) {
-        return <div>Error loading meal details: {(mealQuery.error as Error).message}</div>;
+        return <div className="text-center p-8 text-red-600 font-bold">Error loading meal details: {(mealQuery.error as Error).message}</div>;
     }
 
     const meal = mealQuery.data;
 
     if (!meal) {
-        return <div>Jídlo nebylo nalezeno.</div>;
+        return <div className="text-center p-8 text-gray-500 text-2xl">Jídlo nebylo nalezeno.</div>;
     }
 
     return (
-        <div className="w-full mb-6 flex-col justify-center">
+        <div className="w-full mb-6">
             <BackButton/>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16">
+                    <div className="lg:col-span-2 flex flex-col items-center">
+                        <div className="w-full aspect-video overflow-hidden rounded-xl shadow-md">
+                            <img
+                                src={meal.imageUrl}
+                                alt={meal.name}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div className="flex w-full items-center py-4 justify-around">
+                            <button onClick={() => handleRateClick(RATINGS["LIKED"])}
+                                    className="cursor-pointer hover:text-blue-600 transition-colors flex items-center justify-center flex-col group">
+                                <ThumbsUp className="w-8 h-8 mb-1 group-hover:scale-110 transition-transform"/>
+                                <strong className="text-lg">{meal.likes ?? 0}</strong>
+                            </button>
+                            <button onClick={() => handleRateClick(RATINGS["DISLIKED"])}
+                                    className="cursor-pointer hover:text-red-600 transition-colors flex items-center justify-center flex-col group">
+                                <ThumbsDown className="w-8 h-8 mb-1 group-hover:scale-110 transition-transform"/>
+                                <strong className="text-lg">{meal.dislikes ?? 0}</strong>
+                            </button>
+                        </div>
 
-            <div className="flex flex-row px-16 space-x-20">
-                <div className="flex flex-col flex-[2] items-center">
-                    <div className="w-full aspect-video overflow-hidden rounded-xl">
-                        <img
-                            src={meal.imageUrl}
-                            alt={meal.name}
-                            className="w-full h-full object-cover"
-                        />
+                        <p className="font-bold text-2xl self-start lg:self-center mt-4 mb-2">Vývoj cen</p>
+                        <div className="w-full pt-3" style={{maxWidth: 420}}>
+                            <MealsHistoryChart history={meal.history} height={180}/>
+                        </div>
                     </div>
-                    <div className="flex w-full items-center py-2 justify-around">
-                        <div className="cursor-pointer hover:text-blue-500 flex items-center justify-center flex-col">
-                            <ThumbsUp onClick={() => handleRateClick(RATINGS["LIKED"])}/>
-                            <strong>{meal.likes ?? 0}</strong>
-                        </div>
-                        <div className="cursor-pointer hover:text-blue-500 flex items-center justify-center flex-col">
-                            <ThumbsDown onClick={() => handleRateClick(RATINGS["DISLIKED"])}/>
-                            <strong>{meal.dislikes ?? 0}</strong>
-                        </div>
 
-                    </div>
-                    <p className="font-bold text-2xl">Vývoj cen</p>
-                    <div className="w-full pt-3" style={{maxWidth: 420}}>
-                        <MealsHistoryChart history={meal.history} height={180}/>
-                    </div>
-                </div>
-                <div className="flex flex-col flex-[3] space-y-2">
-                    <p className="font-bold text-4xl">{meal.name}</p>
-                    <div className="w-96 border"/>
-                    <p className="mb-4 text-justify">{meal.description}</p>
-                    {meal.history &&
-                        <div className="w-full flex justify-end">
-                            <div className="bg-[#F2F2F2] border rounded-md w-40 flex p-3 justify-between">
-                                <p className="font-bold">Cena</p>
-                                <p className="font-bold">{meal.history.at(meal.history.length - 1)?.price},-</p>
+                    <div className="lg:col-span-3 flex flex-col space-y-4">
+                        <h1 className="font-bold text-4xl text-gray-900">{meal.name}</h1>
+                        <div className="w-full sm:w-96 border-b border-gray-300"/>
+                        <p className="mb-4 text-justify text-gray-700 leading-relaxed">{meal.description}</p>
+
+                        {meal.history && (
+                            <div className="w-full flex justify-end py-4">
+                                <div
+                                    className="bg-gray-50 border border-gray-200 rounded-lg w-48 flex p-4 justify-between items-center shadow-sm">
+                                    <p className="font-semibold text-gray-600">Aktuální cena</p>
+                                    <p className="font-bold text-xl text-blue-600">{meal.history.at(meal.history.length - 1)?.price},-</p>
+                                </div>
                             </div>
-                        </div>
-                    }
-                    <div className="flex flex-row items-start gap-[25%] mt-12">
-                        <div>
-                            <p className="font-bold text-xl">Alergeny</p>
-                            <div className="pl-8">
-                                {meal.allergens.map((allergen: string, index: number) => (
-                                    <li key={index} className="font-bold">{allergen}</li>
-                                ))}
+                        )}
+
+                        {/* Spodní sekce - Grid pro alergeny a nutriční hodnoty */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8 border-t pt-8 border-gray-100">
+                            <div>
+                                <h3 className="font-bold text-xl mb-4 flex items-center">
+                                    Alergeny
+                                </h3>
+                                <ul className="pl-5 list-disc space-y-1 text-gray-700">
+                                    {meal.allergens.map((allergen: string, index: number) => (
+                                        <li key={index} className="font-medium">{allergen}</li>
+                                    ))}
+                                </ul>
                             </div>
-                        </div>
-                        <div>
-                            <p className="font-bold text-xl">Výživové hodnoty (na {meal.weight}g)</p>
-                            <div className="pl-8">
-                                <li className="font-bold">~{meal.kcal} KCal</li>
-                                <li className="font-bold">{meal.proteins}g bílkovin</li>
-                                <li className="font-bold">{meal.fats}g tuku</li>
-                                <li className="font-bold">{meal.carbs}g sacharidů</li>
+                            <div>
+                                <h3 className="font-bold text-xl mb-4">
+                                    Výživové hodnoty <span
+                                    className="text-base font-normal text-gray-500">(na {meal.weight}g)</span>
+                                </h3>
+                                <ul className="pl-5 list-disc space-y-1 text-gray-700">
+                                    <li className="font-medium"><span className="font-bold">{meal.kcal}</span> KCal</li>
+                                    <li className="font-medium"><span
+                                        className="font-bold">{meal.proteins}g</span> bílkovin
+                                    </li>
+                                    <li className="font-medium"><span className="font-bold">{meal.fats}g</span> tuku
+                                    </li>
+                                    <li className="font-medium"><span
+                                        className="font-bold">{meal.carbs}g</span> sacharidů
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

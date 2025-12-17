@@ -7,7 +7,6 @@ type MenuProps = {
     date: Date;
     isLoading?: boolean;
     error?: string | null;
-    // PŘIDÁNO: Funkce pro kliknutí
     onDishClick?: (id: number) => void;
 };
 
@@ -32,7 +31,6 @@ export default function Menu({ soups, mainCourses, date, isLoading, error, onDis
             </div>
 
             <div className="flex flex-col">
-                {/* PŘIDÁNO: Předáváme onDishClick dál do sekcí */}
                 {soups.length > 0 && (
                     <MenuSection title="Polévky" meals={soups} onDishClick={onDishClick} />
                 )}
@@ -53,7 +51,6 @@ export default function Menu({ soups, mainCourses, date, isLoading, error, onDis
 type MenuSectionProps = {
     title: string;
     meals: MealOverview[];
-    // PŘIDÁNO: Funkce pro kliknutí
     onDishClick?: (id: number) => void;
 };
 
@@ -71,9 +68,7 @@ const MenuSection = ({ title, meals, onDishClick }: MenuSectionProps) => {
                     return (
                         <div
                             key={meal.id || index}
-                            // UPRAVENO: Přidán kurzor, transition a hover efekt (brightness funguje univerzálně)
                             className={`${rowBackgroundClass} cursor-pointer transition-all duration-200 hover:brightness-95 hover:shadow-inner relative`}
-                            // PŘIDÁNO: Obsluha kliknutí
                             onClick={() => {
                                 if (meal.id && onDishClick) {
                                     onDishClick(meal.id);

@@ -12,6 +12,7 @@ import Buffet from "../components/ui/buffet/Buffet.tsx";
 
 import type {DailyMenuResponse, BuffetMenu} from "../api/models";
 import BackButton from "../components/BackButton.tsx";
+import MenuPageSkeleton from "../components/ui/loaders/MenuPageSkeleton.tsx";
 
 export default function MenuPage() {
     const navigate = useNavigate(); // Hook pro navigaci
@@ -57,6 +58,10 @@ export default function MenuPage() {
     const mainCourses = dailyMenu.mainCourses || [];
 
     const availableDates: string[] = [];
+
+    if(buffetQuery.isLoading){
+        return <MenuPageSkeleton/>
+    }
 
     // Funkce pro proklik na detail jídla
     const handleDishClick = (dishId: number) => {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
     BanknoteArrowUp,
-    ChartColumnBig,
+    ChartColumnBig, Hourglass,
     LogOut,
     User,
     Utensils
@@ -99,12 +99,21 @@ export default function HeaderMenu() {
                             </Link>
 
                             <Link
+                                to="/history"
+                                className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover"
+                            >
+                                <Hourglass />
+                                <p>Historie</p>
+                            </Link>
+
+                            <Link
                                 to="/occupancy"
                                 className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover"
                             >
                                 <ChartColumnBig />
                                 <p>Zatíženost</p>
                             </Link>
+
 
                             <button className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left cursor-pointer" onClick={()=> alert("topup")}>
                                 <BanknoteArrowUp />

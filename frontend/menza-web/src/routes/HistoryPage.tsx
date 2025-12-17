@@ -5,6 +5,7 @@ import {getUsers} from '../api/users/users';
 import {useCanteenStore} from '../store/store';
 import BackButton from "../components/BackButton.tsx";
 import {ChevronDown} from "lucide-react";
+import HistoryLoader from "../components/ui/loaders/HistoryLoader.tsx";
 
 
 const getAvailableYears = (items: MealsHistory[]): string[] => {
@@ -127,7 +128,7 @@ const HistoryPage: React.FC = () => {
 
 
     if (isLoading) {
-        return <div className="text-center p-8 text-gray-600">Načítám historii objednávek...</div>;
+        return <HistoryLoader/>;
     }
 
     if (error) {
@@ -135,12 +136,12 @@ const HistoryPage: React.FC = () => {
     }
 
     if (historyData.length === 0) {
-        return <div className="text-center p-8 text-gray-500">V celkové historii nemáte žádné objednávky.</div>;
+        return <div className="text-center p-8 text-gray-500 text-2xl">V celkové historii nemáte žádné objednávky.</div>;
     }
 
 
     const dataMessage = filteredData.length === 0 ?
-        <div className="text-center p-8 text-gray-500 bg-white rounded-lg shadow-md">V tomto měsíci nemáte žádné
+        <div className="text-center p-8 text-gray-500 bg-white rounded-lg shadow-md text-2xl">V tomto měsíci nemáte žádné
             objednávky.</div> :
         <HistoryList items={filteredData}/>;
 
