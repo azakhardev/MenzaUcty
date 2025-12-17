@@ -5,9 +5,9 @@
  * OpenAPI spec version: v0
  */
 import type {
-  Meal,
   TopUpRequest,
-  User
+  User,
+  UserHistoryItemDto
 } from '.././models';
 
 import { api } from '.././axios';
@@ -61,8 +61,8 @@ const getUserById = (
  */
 const getUserHistory = (
     id: number,
- options?: SecondParameter<typeof api<Meal[]>>,) => {
-      return api<Meal[]>(
+ options?: SecondParameter<typeof api<UserHistoryItemDto[]>>,) => {
+      return api<UserHistoryItemDto[]>(
       {url: `/users/${id}/history`, method: 'GET'
     },
       options);
