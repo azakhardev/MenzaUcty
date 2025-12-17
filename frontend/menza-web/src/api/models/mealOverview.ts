@@ -4,8 +4,11 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { Alergen } from './alergen';
 
-export interface Alergen {
+export interface MealOverview {
   id?: number;
   name?: string;
+  price?: number;
+  alergenList?: Alergen[];
 }
