@@ -1,7 +1,6 @@
 package cz.vse.menza_api.services;
 
 import cz.vse.menza_api.dto.MealOverview;
-import cz.vse.menza_api.dto.TopUpRequest;
 import cz.vse.menza_api.exceptions.ResourceNotFoundException;
 import cz.vse.menza_api.models.Alergen;
 import cz.vse.menza_api.models.Meal;
@@ -9,10 +8,7 @@ import cz.vse.menza_api.models.MealsHistory;
 import cz.vse.menza_api.repositories.MealRepository;
 import cz.vse.menza_api.repositories.MealsHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,8 +16,8 @@ import java.util.List;
 
 @Service
 public class MealService {
-    private MealRepository mealRepository;
-    private MealsHistoryRepository mealsHistoryRepository;
+    private final MealRepository mealRepository;
+    private final MealsHistoryRepository mealsHistoryRepository;
 
     @Autowired
     public MealService(MealRepository mealRepository, MealsHistoryRepository mealsHistoryRepository) {

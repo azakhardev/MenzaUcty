@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {DAYS} from "../utils/constants.ts";
 import Button from "../components/ui/Button.tsx";
 import {Bar, BarChart, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import BackButton from "../components/BackButton.tsx";
 
 type ChartItem = {
     name: string;
@@ -46,7 +47,7 @@ export default function CanteenOccupancyPage() {
     }
 
 
-    return <div
+    return <><BackButton/><div
         className="relative flex flex-col-reverse md:flex-row mt-20 gap-10 w-full justify-around items-center px-6 lg:px-[10%] 2xl:px-[20%] h-[500px] z-0!">
         <div className="flex flex-row md:flex-col gap-4">
             {Object.entries(DAYS).map(([key, val]) => <Button
@@ -84,5 +85,5 @@ export default function CanteenOccupancyPage() {
             </BarChart>
         </ResponsiveContainer>
 
-    </div>
+    </div>        </>
 }

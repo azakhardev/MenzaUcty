@@ -106,14 +106,14 @@ export default function HeaderMenu() {
                                 <p>Zatíženost</p>
                             </Link>
 
-                            <button className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left">
+                            <button className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left cursor-pointer" onClick={()=> alert("topup")}>
                                 <BanknoteArrowUp />
                                 <p>Dobít kredit</p>
                             </button>
 
                             <button
                                 onClick={logout}
-                                className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left"
+                                className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left cursor-pointer"
                             >
                                 <LogOut />
                                 <p>Odhlásit se</p>

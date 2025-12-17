@@ -111,17 +111,15 @@ export default function Calendar({ selectedDate, onDateSelect, availableDates = 
                     const dateString = dayObj.date.toLocaleDateString("sv-SE");
                     const hasMenu = availableDatesSet.has(dateString);
 
-                    // Přidáno 'cursor-pointer' do základu
                     let buttonClass = "relative w-full aspect-square flex flex-col items-center justify-center rounded-md text-xs transition-all cursor-pointer ";
 
                     if (isSelected) {
-                        buttonClass += "bg-[var(--color-button-primary)] text-[var(--color-text-on-dark)] font-bold shadow-sm";
+                        buttonClass += "bg-button-primary text-text-on-dark font-bold shadow-sm";
                     } else if (dayObj.currentMonth) {
-                        buttonClass += "hover:bg-[var(--color-background)] text-[var(--color-text)]";
-                        if (isToday) buttonClass += " border border-[var(--color-border-contrast)] font-semibold";
+                        buttonClass += "hover:bg-background text-text";
+                        if (isToday) buttonClass += " border border-border-contrast font-semibold";
                     } else {
-                        // Zde můžete nechat cursor-pointer, aby šlo překliknout měsíc, nebo dát cursor-default
-                        buttonClass += "text-[var(--color-text)] opacity-30";
+                        buttonClass += "text-text opacity-30";
                     }
 
                     return (

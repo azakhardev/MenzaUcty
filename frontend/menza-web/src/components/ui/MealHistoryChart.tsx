@@ -28,8 +28,9 @@ export default function MealPriceChart({ history = [], height = 180}: Props) {
   };
 
   if (sorted.length === 0) {
-    return <div className="text-sm text-black">Žádná historie cen</div>;
+    return <div className="text-sm  text-center text-text">Žádná historie cen</div>;
   }
 
-  return <Chart options={options} series={series as any} type="line" height={height}/>;
+  return <Chart width="100%" options={options} series={series as any} type="line" height={height}/>;
+
 }
