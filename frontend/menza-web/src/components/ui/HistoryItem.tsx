@@ -1,5 +1,6 @@
 import React from 'react';
 import type { MealsHistory } from '../../api/models/mealsHistory';
+import {Link} from "react-router-dom";
 
 interface MealsHistoryProps {
     item: MealsHistory;
@@ -17,7 +18,7 @@ const HistoryItem: React.FC<MealsHistoryProps> = ({ item }) => {
 
 
     return (
-        <div className="flex justify-between items-center py-2 px-4 border-b border-gray-200 hover:bg-gray-50">
+        <Link to={`/menu/${item.id}`} className="flex justify-between items-center py-2 px-4 border-b border-gray-200 hover:bg-gray-50">
 
             <div className="flex flex-col">
                 <span className="font-bold text-sm">
@@ -32,7 +33,7 @@ const HistoryItem: React.FC<MealsHistoryProps> = ({ item }) => {
                 {formattedPrice}
             </div>
 
-        </div>
+        </Link>
     );
 };
 

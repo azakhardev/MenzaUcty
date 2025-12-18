@@ -1,34 +1,30 @@
 package cz.vse.menza_api.dto.menu;
 
-import cz.vse.menza_api.models.Meal;
-
+import cz.vse.menza_api.dto.MealOverview;
 import java.util.List;
 
 public class DailyMenuResponse {
-    private List<Meal> mainCourses;
 
-    private List<Meal> soups;
+    // ZMĚNA: Místo List<Meal> zde musí být List<MealOverview>
+    private List<MealOverview> soups;
+    private List<MealOverview> mainCourses;
 
-    public DailyMenuResponse() {}
-
-    public DailyMenuResponse(List<Meal> mainCourses, List<Meal> soups) {
-        this.mainCourses = mainCourses;
-        this.soups = soups;
-    }
-
-    public List<Meal> getMainCourses() {
-        return mainCourses;
-    }
-
-    public void setMainCourses(List<Meal> mainCourses) {
-        this.mainCourses = mainCourses;
-    }
-
-    public List<Meal> getSoups() {
+    // --- Getters ---
+    public List<MealOverview> getSoups() {
         return soups;
     }
 
-    public void setSoups(List<Meal> soups) {
+    public List<MealOverview> getMainCourses() {
+        return mainCourses;
+    }
+
+    // --- Setters ---
+    // Toto je metoda, na kterou si stěžuje vaše IDE. Nyní přijímá správný typ.
+    public void setSoups(List<MealOverview> soups) {
         this.soups = soups;
+    }
+
+    public void setMainCourses(List<MealOverview> mainCourses) {
+        this.mainCourses = mainCourses;
     }
 }
