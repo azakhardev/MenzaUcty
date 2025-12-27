@@ -71,7 +71,7 @@ export default function Login() {
 
 
             {menuQuery.isLoading ? <Skeleton className="w-[60vw] lg:w-[30vw] lg:h-[50vh] flex-1"/> : <div className="lg:flex-1">
-                <div>
+                <div className="min-w-[280px] md:min-w-[400px] lg:min-w-[500px]">
                     <Menu soups={menuQuery.data?.soups ?? []} mainCourses={menuQuery.data?.mainCourses ?? []}
                           date={new Date()}/>
                 </div>

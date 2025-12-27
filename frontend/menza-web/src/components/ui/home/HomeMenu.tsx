@@ -20,7 +20,7 @@ export default function HomeMenu() {
     });
 
     return (
-        <div className="flex flex-col h-[550px] shadow-xl rounded-2xl overflow-hidden bg-white border border-gray-100">
+        <div className="flex flex-col h-[550px] rounded-2xl overflow-hidden bg-white">
             <div
                 onClick={() => navigate("/menu")}
                 className="flex items-center justify-center bg-surface text-text-on-dark py-4 px-6 shrink-0 cursor-pointer hover:opacity-95 transition-all"
@@ -34,7 +34,7 @@ export default function HomeMenu() {
                 {menuQuery.isLoading ? (
                     <div className="flex-1 flex items-center justify-center"><Spinner size="md" /></div>
                 ) : (
-                    <div className="min-h-full flex flex-col">
+                    <div className="flex flex-col bg-card rounded-b-xl">
                         <Menu
                             soups={menuQuery.data?.soups || []}
                             mainCourses={menuQuery.data?.mainCourses || []}

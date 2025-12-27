@@ -115,10 +115,13 @@ export default function HeaderMenu() {
                             </Link>
 
 
-                            <button className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover w-full text-left cursor-pointer" onClick={()=> alert("topup")}>
+                            <Link
+                                to="/topup"
+                                className="flex gap-2 items-center px-4 py-2 text-xl hover:bg-button-secondary-hover"
+                            >
                                 <BanknoteArrowUp />
                                 <p>Dobít kredit</p>
-                            </button>
+                            </Link>
 
                             <button
                                 onClick={logout}
