@@ -53,7 +53,11 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // ⬅️ Přesný Origin!
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173", // Pro lokální vývoj (npm run dev)
+                "http://localhost",      // Pro Docker (Nginx běží na portu 80)
+                "http://127.0.0.1"       // Pro jistotu (někdy prohlížeče používají IP)
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // ⬅️ Nutné pro JWT a Cookies

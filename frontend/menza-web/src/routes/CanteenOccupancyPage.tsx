@@ -47,7 +47,6 @@ export default function CanteenOccupancyPage() {
         return <div className="text-center p-8 text-red-600 font-bold">{occupancyQuery.error.message}</div>;
     }
 
-
     return <>
         <BackButton/>
         <div
@@ -62,6 +61,7 @@ export default function CanteenOccupancyPage() {
             <ResponsiveContainer className="md:flex-1"
             >
                 <BarChart
+                    className="bg-white p-4 rounded-md shadow-md"
                     barCategoryGap="5"
                     data={charData}
                     height="100%"
@@ -73,7 +73,7 @@ export default function CanteenOccupancyPage() {
                     width="100%"
                 >
                     <XAxis dataKey="name" stroke="#000000"
-                           tick={{fill: '#000000'}}/>
+                           tick={{fill: '#000000'}} />
                     <YAxis dataKey="occupancy" stroke="#000000"
                            tick={{fill: '#000000'}}/>
                     <Tooltip/>
