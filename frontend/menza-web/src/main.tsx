@@ -12,6 +12,8 @@ import MealDetailPage from "./routes/MealDetailPage.tsx";
 import CanteenOccupancyPage from "./routes/CanteenOccupancyPage.tsx";
 import ProtectedRoute from "./routes/ProtectedRoute.tsx";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import TopupPage from "./routes/TopupPage.tsx";
+import Success from "./routes/Success.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ createRoot(document.getElementById('root')!).render(
                             <Route path="history" element={<HistoryPage/>}/>
                             <Route path="menu/:id" element={<MealDetailPage/>}/>
                             <Route path="occupancy" element={<CanteenOccupancyPage/>}/>
+                            <Route path="topup" element={<TopupPage/>}/>
+                            <Route path="topup/success" element={<Success/>}/>
                         </Route>
                     </Route>
                 </Routes>

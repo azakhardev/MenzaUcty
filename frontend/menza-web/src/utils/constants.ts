@@ -10,3 +10,8 @@ export const DAYS: Record<string, string> = {
     "THU": "ČT",
     "FRI": "PÁ"
 }
+
+export const RATINGS: Record<string, string> = {
+    "LIKED": "LIKED",
+    "DISLIKED": "DISLIKED"
+}

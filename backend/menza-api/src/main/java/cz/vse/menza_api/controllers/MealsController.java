@@ -1,6 +1,7 @@
 package cz.vse.menza_api.controllers;
 
 import cz.vse.menza_api.dto.ApiErrorResponse;
+import cz.vse.menza_api.dto.RateRequest;
 import cz.vse.menza_api.dto.RatingResponse;
 import cz.vse.menza_api.models.Alergen;
 import cz.vse.menza_api.models.Meal;
@@ -155,5 +156,11 @@ public class MealsController {
                 .count();
 
         return ResponseEntity.ok(new RatingResponse(likes, dislikes));
+    }
+
+    @PostMapping("/rate")
+    public ResponseEntity<String> rate(@RequestBody RateRequest rating) {
+        String newRating = ratingService.rate(rating.getMealId(), rating.getUserId(), rating.getRating());
+        return ResponseEntity.ok(newRating);
     }
 }

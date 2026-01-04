@@ -1,30 +1,13 @@
-import {useEffect, useState} from "react";
-import type {DailyMenuResponse} from "../api/models";
-import {useCanteenStore} from "../store/store.ts";
-import {getMenu} from "../api/menu/menu.ts";
-import {dateToMenuString} from "../utils/dateUtils.ts";
+import HomeHistory from "../components/ui/home/HomeHistory.tsx";
+import HomeMenu from "../components/ui/home/HomeMenu.tsx";
 
 export default function Home() {
-
-    const axiosMenu = getMenu();
-    const canteen = useCanteenStore(state => state.currentCanteen);
-
-    const [menu, setMenu] = useState<DailyMenuResponse>();
-
-    useEffect(() => {
-        async function loadMenu() {
-            const response = await axiosMenu.getMenu(canteen, dateToMenuString(new Date()));
-
-            setMenu(response);
-        }
-
-        loadMenu();
-
-    }, []);
-
-    return <div>
-        {!menu ? <p>Loading....</p> : <div className="flex flex-col gap-2">
-            Seznam jídel
-        </div>}
-    </div>
+    return (
+        <div className="w-full max-w-7xl mx-auto p-6 lg:p-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <HomeHistory />
+                <HomeMenu />
+            </div>
+        </div>
+    );
 }

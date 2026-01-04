@@ -16,8 +16,8 @@ import java.util.List;
 
 @Service
 public class MealService {
-    private MealRepository mealRepository;
-    private MealsHistoryRepository mealsHistoryRepository;
+    private final MealRepository mealRepository;
+    private final MealsHistoryRepository mealsHistoryRepository;
 
     @Autowired
     public MealService(MealRepository mealRepository, MealsHistoryRepository mealsHistoryRepository) {
