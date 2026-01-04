@@ -44,7 +44,7 @@ export default function CheckoutForm() {
                 id="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {isLoading ? "Zpracovávám..." : "Zaplatit 500 Kč"}
+                {isLoading ? "Zpracovávám..." : "Zaplatit"}
             </button>
 
             {message && (
