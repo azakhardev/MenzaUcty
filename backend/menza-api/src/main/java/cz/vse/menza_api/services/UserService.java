@@ -87,7 +87,7 @@ public class UserService {
                     Meal meal = record.getMeal();
 
                     return new UserHistoryItemDto(
-                            record.getId(),
+                            meal != null ? meal.getId() : record.getId(),
                             // Dávame názov, ktorý bude frontend čítať ako 'name'
                             meal != null ? meal.getName() : "Názov nebol nájdený",
                             record.getDate(), // Dátum transakcie

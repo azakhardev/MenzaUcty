@@ -54,7 +54,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173", // Pro lokální vývoj (npm run dev)
+                "http://localhost:5173",// Pro lokální vývoj (npm run dev)
                 "http://localhost",      // Pro Docker (Nginx běží na portu 80)
                 "http://127.0.0.1"       // Pro jistotu (někdy prohlížeče používají IP)
         ));
