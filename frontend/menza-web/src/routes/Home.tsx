@@ -1,5 +1,5 @@
-import HomeHistory from "../components/ui/Homepage/HomeHistory.tsx";
-import HomeMenu from "../components/ui/Homepage/HomeMenu.tsx";
+import HomeHistory from "../components/ui/home/HomeHistory.tsx";
+import HomeMenu from "../components/ui/home/HomeMenu.tsx";
 
 export default function Home() {
     return (

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # ===============================
+  # 1. DATABASE (PostgreSQL)
+  # ===============================
+  db:
+    image: postgres:15-alpine
+    container_name: menza-db
+    environment:
+      POSTGRES_DB: MenzaUcty
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database-init:/docker-entrypoint-initdb.d
+
+  # ===============================
+  # 2. BACKEND (Spring Boot)
+  # ===============================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: menza-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:      
+      # Zde měníme 'localhost' na název služby 'db' definované výše
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/MenzaUcty
+      SPRING_DATASOURCE_USERNAME: pgadmin
+      SPRING_DATASOURCE_PASSWORD: 123456            
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update 
+
+  # ===============================
+  # 3. FRONTEND (React + Nginx)
+  # ===============================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: menza-frontend
+    ports:
+      - "80:80" # Aplikace poběží na localhost:80 (tedy jen http://localhost)
+    depends_on:
+      - backend
