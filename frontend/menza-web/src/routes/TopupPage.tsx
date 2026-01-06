@@ -4,7 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { ArrowLeft } from "lucide-react"; // Pokud používáš lucide-react
 import CheckoutForm from "../components/CheckoutForm";
 
-const stripePromise = loadStripe("pk_test_51SeY6oPfGSyRhweZF1o3PiZIa3lSbAkXmzoIDzg06DmTXgV04UzTcnru21ggW3FcsCixS88FpuwlmBUpsPEDFADr006qQBowHB");
+const stripePromise = loadStripe("STRIPE_FE_SECRET_KEY");
 
 export default function TopupPage() {
     const [clientSecret, setClientSecret] = useState("");
